@@ -3,10 +3,12 @@
            https://api.github.com/users/<your name>
 */
 axios.get('https://api.github.com/users/rogermcconkiejr')
-  .then (data => {
-    console.log('data: ', data)
-    const myInfo = data.data;
+  .then ((response) => {
+    console.log('data: ', response)
+    const myInfo = response.data;
     console.log('UserInfo: ', myInfo)
+    const card = createCard(myInfo);
+    cards.appendChild(card);
   })
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
@@ -21,8 +23,7 @@ axios.get('https://api.github.com/users/rogermcconkiejr')
 */
 
 const cards = document.querySelector('.cards');
-const cardInfo = createCard(myInfo);
-cards.appendChild(cardInfo);
+
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
           , manually find some other users' github handles, or use the list found 
@@ -33,7 +34,42 @@ cards.appendChild(cardInfo);
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  'tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell'
+];
+
+followersArray.forEach(teacherName => {
+  axios.get(`https://api.github.com/users/${teacherName}`)
+  .then ((response)=>{
+    const newCard = createCard(response.data);
+    console.log(newCard);
+    const cards = document.querySelector('.cards');
+    cards.appendChild(newCard);
+  })
+})
+
+// axios.get('https://api.github.com/users/rogermcconkiejr')
+// .then ((response)=>{
+//   const followersName = response.data.followers_url;
+//   console.log(followersName);
+//   axios.get(followersName)
+//   .then((response)=>{
+//     console.log(response);
+//     response.data.login.
+//       axios.get(`https://api.github.com/users/${followerName}`)
+//       .then((response)=>{
+//       const followerCard = createCard(response.data);
+//       const cards = document.querySelector('.cards');
+//       cards.appendChild(followerCard);
+//     })
+//     })
+//   })
+// })
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -80,7 +116,7 @@ function createCard(element){
   cardInfo.appendChild(username);
   cardInfo.appendChild(location);
   cardInfo.appendChild(profile);
-  profile.appendChild(userLink); //This could be wrong.
+  profile.appendChild(userLink);
   cardInfo.appendChild(followers);
   cardInfo.appendChild(following);
   cardInfo.appendChild(bio);
