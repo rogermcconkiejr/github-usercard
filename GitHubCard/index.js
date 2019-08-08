@@ -2,6 +2,12 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
+axios.get('https://api.github.com/users/rogermcconkiejr')
+  .then (data => {
+    console.log('data: ', data)
+    const myInfo = data.data;
+    console.log('UserInfo: ', myInfo)
+  })
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -14,6 +20,9 @@
            create a new component and add it to the DOM as a child of .cards
 */
 
+const cards = document.querySelector('.cards');
+const cardInfo = createCard(myInfo);
+cards.appendChild(cardInfo);
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
           , manually find some other users' github handles, or use the list found 
@@ -44,7 +53,51 @@ const followersArray = [];
   </div>
 </div>
 
+
+
 */
+function createCard(element){
+  const card = document.createElement('div');
+  const img = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const username = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const userLink = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  card.classList.add('card');
+  name.classList.add('name');
+  username.classList.add('username');
+  cardInfo.classList.add('card-info');
+
+  card.appendChild(img);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(userLink); //This could be wrong.
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+img.src = element.avatar_url;
+name.textContent = element.name;
+username.textContent = element.login;
+location.textContent = element.location;
+const userURL = element.url;
+userLink.innerHTML = userURL.link(element.url);
+followers.textContent = `Followers: ${element.followers}`;
+following.textContent = `Following: ${element.following}`;
+bio.textContent = element.bio;
+
+return card;
+}
+
 
 /* List of LS Instructors Github username's: 
   tetondan
